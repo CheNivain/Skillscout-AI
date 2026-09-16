@@ -1,0 +1,6 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "SkillScout: full system", "type": "debugpy", "request": "launch", "program": "${workspaceFolder}/scripts/dev.py", "console": "integratedTerminal", "cwd": "${workspaceFolder}", "subProcess": true, "justMyCode": true}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {"label": "SkillScout: setup", "type": "process", "command": "python3", "windows": {"command": "python"}, "args": ["scripts/setup.py"], "problemMatcher": [], "options": {"cwd": "${workspaceFolder}"}},
+    {"label": "SkillScout: start", "type": "process", "command": "${workspaceFolder}/.venv/bin/python", "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"}, "args": ["scripts/dev.py"], "problemMatcher": [], "presentation": {"reveal": "always", "panel": "dedicated"}, "options": {"cwd": "${workspaceFolder}"}},
+    {"label": "SkillScout: download model", "type": "process", "command": "${workspaceFolder}/.venv/bin/python", "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"}, "args": ["scripts/model.py", "--pull"], "problemMatcher": [], "options": {"cwd": "${workspaceFolder}"}},
+    {"label": "SkillScout: test", "type": "process", "command": "${workspaceFolder}/.venv/bin/python", "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"}, "args": ["-m", "pytest"], "group": {"kind": "test", "isDefault": true}, "problemMatcher": [], "options": {"cwd": "${workspaceFolder}"}},
+    {"label": "SkillScout: build UI", "type": "shell", "command": "npm run build", "options": {"cwd": "${workspaceFolder}/frontend"}, "group": "build", "problemMatcher": []},
+    {"label": "SkillScout: evaluate retrieval", "type": "process", "command": "${workspaceFolder}/.venv/bin/python", "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"}, "args": ["-m", "backend.evaluation"], "problemMatcher": [], "options": {"cwd": "${workspaceFolder}"}},
+    {"label": "SkillScout: smoke test running app", "type": "process", "command": "${workspaceFolder}/.venv/bin/python", "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"}, "args": ["scripts/smoke.py", "--require-llm"], "problemMatcher": [], "options": {"cwd": "${workspaceFolder}"}}
+  ]
+}
