@@ -1,0 +1,207 @@
+"""Curated catalogue references plus synthetic, consent-safe learning posts.
+
+Only titles and provider URLs identify real resources. All descriptions are our
+short summaries; prices, discounts, durations, ratings and post activity are demo
+fixtures, NOT scraped, verified commercial offers or labor-market evidence.
+"""
+from datetime import datetime, timedelta, timezone
+
+CATALOGUE_NOTE = (
+    "Demonstration catalogue record. Real provider reference; description is a project summary. "
+    "Price, discount, duration and rating are sample data, not live verified facts. "
+    "Check the provider for current availability, prerequisites and full costs."
+)
+CORPUS_NOTE = (
+    "Synthetic professional-learning posts created for this assignment; no LinkedIn scraping or personal data. "
+    "Trends compare the latest 14 days with the preceding 14 days and describe only this small corpus, "
+    "not industry demand. A first appearance is assigned 100% growth as a display convention."
+)
+
+# slug, title, provider, URL, summary, skills, category, level, hours, demo price,
+# demo original price, offer expiry offset in days, kind.
+_COURSES = [
+    ("python-data-science", "Python for Data Science, AI & Development", "IBM · Coursera",
+     "https://www.coursera.org/learn/python-for-applied-data-science-ai",
+     "Start with Python syntax, functions and notebooks, then explore data analysis using Pandas. A practical foundation for data science.",
+     ["Python", "Pandas"], "Data & AI", "Beginner", 24, 29.7, 99, 6, "Course"),
+    ("statistics-intro", "Introduction to Statistics", "Stanford · Coursera",
+     "https://www.coursera.org/learn/stanford-statistics",
+     "Learn probability, sampling, distributions, hypothesis testing and regression to reason about data and uncertainty.",
+     ["Statistics"], "Data & AI", "Beginner", 18, 24, 60, 9, "Course"),
+    ("ml-specialization", "Machine Learning Specialization", "DeepLearning.AI · Coursera",
+     "https://www.coursera.org/specializations/machine-learning-introduction",
+     "Build supervised and unsupervised machine learning models with Python; explore regression, classification and model evaluation.",
+     ["Machine Learning", "Python", "Statistics"], "Data & AI", "Intermediate", 90, 49, 149, 4, "Learning path"),
+    ("kaggle-python", "Python", "Kaggle Learn", "https://www.kaggle.com/learn/python",
+     "Short programming exercises introducing Python functions, lists, loops and external libraries for data work.",
+     ["Python"], "Data & AI", "Beginner", 5, 0, 0, None, "Course"),
+    ("kaggle-pandas", "Pandas", "Kaggle Learn", "https://www.kaggle.com/learn/pandas",
+     "Practice selecting, grouping, joining and cleaning tabular data with Pandas and Python notebooks.",
+     ["Pandas", "Python"], "Data & AI", "Intermediate", 4, 0, 0, None, "Course"),
+    ("kaggle-ml", "Intro to Machine Learning", "Kaggle Learn", "https://www.kaggle.com/learn/intro-to-machine-learning",
+     "Build first predictive models, validate predictions and compare decision trees with random forests using Python.",
+     ["Machine Learning", "Python"], "Data & AI", "Beginner", 3, 0, 0, None, "Course"),
+    ("data-viz", "Data Visualization", "Kaggle Learn", "https://www.kaggle.com/learn/data-visualization",
+     "Create clear charts and visual explanations of data with Python and Seaborn.",
+     ["Data Visualization", "Python"], "Data & AI", "Intermediate", 4, 0, 0, None, "Course"),
+    ("sql-intro", "Intro to SQL", "Kaggle Learn", "https://www.kaggle.com/learn/intro-to-sql",
+     "Query relational datasets with SQL SELECT, filtering, grouping and joins in BigQuery.",
+     ["SQL"], "Data & AI", "Beginner", 3, 0, 0, None, "Course"),
+    ("power-bi-path", "Get started with Microsoft data analytics", "Microsoft Learn",
+     "https://learn.microsoft.com/en-us/training/paths/data-analytics-microsoft/",
+     "Explore a data analyst's workflow and build reports and dashboards with Power BI.",
+     ["Power BI", "Data Visualization"], "Data & AI", "Beginner", 4, 0, 0, None, "Learning path"),
+    ("deep-learning", "Deep Learning Specialization", "DeepLearning.AI · Coursera",
+     "https://www.coursera.org/specializations/deep-learning",
+     "Develop neural networks, convolutional architectures and sequence models using Python. Prior machine learning foundations are recommended.",
+     ["Deep Learning", "Machine Learning", "Python"], "Data & AI", "Advanced", 120, 59, 159, 11, "Learning path"),
+    ("genai-everyone", "Generative AI for Everyone", "DeepLearning.AI · Coursera",
+     "https://www.coursera.org/learn/generative-ai-for-everyone",
+     "Understand generative AI capabilities, applications and responsible use in professional workflows.",
+     ["Generative AI", "Artificial Intelligence"], "Data & AI", "Beginner", 6, 19, 49, 8, "Course"),
+    ("nlp-specialization", "Natural Language Processing Specialization", "DeepLearning.AI · Coursera",
+     "https://www.coursera.org/specializations/natural-language-processing",
+     "Explore text classification, sequence models and attention for natural language processing in Python.",
+     ["NLP", "Deep Learning", "Python"], "Data & AI", "Advanced", 100, 49, 149, -2, "Learning path"),
+    ("cs50-python", "CS50's Introduction to Programming with Python", "Harvard CS50",
+     "https://cs50.harvard.edu/python/",
+     "Practice programming, debugging, unit testing and file handling with Python through problem sets.",
+     ["Python", "Software Testing"], "Software Development", "Beginner", 60, 0, 0, None, "Course"),
+    ("web-basics", "HTML, CSS, and Javascript for Web Developers", "Johns Hopkins · Coursera",
+     "https://www.coursera.org/learn/html-css-javascript-for-web-developers",
+     "Create responsive web pages with HTML, CSS and JavaScript; learn browser-based development fundamentals.",
+     ["HTML & CSS", "JavaScript"], "Software Development", "Beginner", 40, 29, 79, 5, "Course"),
+    ("full-stack-open", "Full Stack Open", "University of Helsinki", "https://fullstackopen.com/en/",
+     "Build modern full stack applications with React, Node.js, REST APIs and testing; includes TypeScript modules.",
+     ["React", "Node.js", "APIs", "Software Testing", "TypeScript"], "Software Development", "Intermediate", 150, 0, 0, None, "Learning path"),
+    ("react-foundations", "React Foundations", "Vercel", "https://nextjs.org/learn/react-foundations",
+     "Build foundational knowledge of JavaScript user interfaces, React components, props and state.",
+     ["React", "JavaScript"], "Software Development", "Beginner", 8, 0, 0, None, "Course"),
+    ("typescript-handbook", "The TypeScript Handbook", "TypeScript", "https://www.typescriptlang.org/docs/handbook/intro.html",
+     "A self-directed learning path through TypeScript types, functions, interfaces, generics and everyday JavaScript interoperability.",
+     ["TypeScript", "JavaScript"], "Software Development", "Intermediate", 12, 0, 0, None, "Learning path"),
+    ("git-github", "Introduction to Git and GitHub", "Google · Coursera",
+     "https://www.coursera.org/learn/introduction-git-github",
+     "Use Git version control, branches, merges and GitHub collaboration to manage software changes.",
+     ["Git"], "Software Development", "Beginner", 16, 19, 49, 10, "Course"),
+    ("fastapi-tutorial", "FastAPI Tutorial — User Guide", "FastAPI", "https://fastapi.tiangolo.com/tutorial/",
+     "Follow a practical self-directed path for building Python REST APIs with validation, authentication and tests.",
+     ["Python", "APIs", "Software Testing"], "Software Development", "Intermediate", 16, 0, 0, None, "Learning path"),
+    ("algorithms-princeton", "Algorithms, Part I", "Princeton · Coursera",
+     "https://www.coursera.org/learn/algorithms-part1",
+     "Learn core data structures, sorting and searching algorithms, and how to evaluate algorithm performance.",
+     ["Algorithms"], "Software Development", "Intermediate", 54, 0, 0, None, "Course"),
+    ("azure-fundamentals", "Microsoft Certified: Azure Fundamentals", "Microsoft Learn",
+     "https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/",
+     "Explore cloud concepts, Azure services, management and governance as preparation for an entry-level cloud certification.",
+     ["Azure", "Cloud Computing", "Networking"], "Cloud & DevOps", "Beginner", 20, 59.4, 99, 7, "Certification"),
+    ("aws-practitioner", "AWS Certified Cloud Practitioner", "AWS",
+     "https://aws.amazon.com/certification/certified-cloud-practitioner/",
+     "Prepare foundational knowledge of AWS cloud services, security and cost concepts for the Cloud Practitioner certification.",
+     ["AWS", "Cloud Computing"], "Cloud & DevOps", "Beginner", 24, 100, 100, None, "Certification"),
+    ("docker-started", "Get started with Docker", "Docker", "https://docs.docker.com/get-started/",
+     "Learn container concepts, images, Dockerfiles and Compose to package and run applications.",
+     ["Docker"], "Cloud & DevOps", "Beginner", 8, 0, 0, None, "Learning path"),
+    ("kubernetes-basics", "Learn Kubernetes Basics", "Kubernetes",
+     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",
+     "Work through deployment, scaling and updating containerized applications in Kubernetes clusters.",
+     ["Kubernetes", "Docker"], "Cloud & DevOps", "Intermediate", 12, 0, 0, None, "Learning path"),
+    ("terraform-aws", "Get Started — AWS", "HashiCorp Developer",
+     "https://developer.hashicorp.com/terraform/tutorials/aws-get-started",
+     "Learn Terraform infrastructure as code to create and manage AWS resources. Provider infrastructure charges may apply.",
+     ["Terraform", "AWS", "Cloud Computing"], "Cloud & DevOps", "Intermediate", 10, 0, 0, None, "Learning path"),
+    ("linux-intro", "Introduction to Linux", "Linux Foundation",
+     "https://training.linuxfoundation.org/training/introduction-to-linux/",
+     "Develop Linux command-line skills, file management and shell scripting foundations for infrastructure work.",
+     ["Linux"], "Cloud & DevOps", "Beginner", 40, 0, 0, None, "Course"),
+    ("github-actions", "GitHub Actions", "GitHub Skills", "https://skills.github.com/",
+     "Explore guided GitHub exercises including continuous integration, workflow automation and delivery using GitHub Actions.",
+     ["CI/CD", "Git"], "Cloud & DevOps", "Intermediate", 6, 0, 0, None, "Learning path"),
+    ("cisco-cyber", "Introduction to Cybersecurity", "Cisco Networking Academy",
+     "https://www.netacad.com/courses/introduction-to-cybersecurity",
+     "Explore cybersecurity fundamentals, common threats, data protection and professional security responsibilities.",
+     ["Cybersecurity"], "Cybersecurity", "Beginner", 6, 0, 0, None, "Course"),
+    ("google-cyber", "Google Cybersecurity Professional Certificate", "Google · Coursera",
+     "https://www.coursera.org/professional-certificates/google-cybersecurity",
+     "Study cybersecurity, Linux, networking and threat detection with practical introductory security analyst exercises.",
+     ["Cybersecurity", "Linux", "Networking", "Threat Detection", "Python"], "Cybersecurity", "Beginner", 160, 49, 99, 3, "Certification"),
+    ("cisco-networking", "Networking Basics", "Cisco Networking Academy",
+     "https://www.netacad.com/courses/networking-basics",
+     "Understand computer networks, addressing, protocols and how devices communicate over a network.",
+     ["Networking"], "Cybersecurity", "Beginner", 22, 0, 0, None, "Course"),
+    ("web-security", "Web Security Academy", "PortSwigger", "https://portswigger.net/web-security",
+     "Practice application security and secure coding concepts in authorized web security labs, including injection defenses.",
+     ["Secure Coding", "Cybersecurity"], "Cybersecurity", "Intermediate", 45, 0, 0, None, "Learning path"),
+    ("technical-writing", "Technical Writing", "Google Developers", "https://developers.google.com/tech-writing",
+     "Learn to organize clear technical documents and communicate complex engineering information to readers.",
+     ["Communication"], "Professional Skills", "Beginner", 8, 0, 0, None, "Course"),
+]
+
+def get_seed_courses() -> list[dict]:
+    now = datetime.now(timezone.utc)
+    result = []
+    for i, row in enumerate(_COURSES):
+        slug, title, provider, url, description, skills, category, level, hours, price, original, expiry, kind = row
+        result.append({
+            "id": slug, "title": title, "provider": provider, "url": url,
+            "description": description, "skills": skills[:], "category": category,
+            "level": level, "duration_hours": hours, "rating": round(4.5 + (i % 5) / 10, 1),
+            "price": price, "original_price": original, "currency": "USD",
+            "discount_percent": round(100 * (1 - price / original)) if original else 0,
+            "offer_expires_at": (now + timedelta(days=expiry)).isoformat() if expiry is not None else None,
+            "kind": kind, "is_demo": True, "source_note": CATALOGUE_NOTE,
+        })
+    return result
+
+# Original fictional observations; no identities, copied social posts, or implied endorsements.
+_POSTS = [
+    (1, "Completed Python for Data Science, AI & Development this week. Python and Pandas help me turn spreadsheet reports into repeatable analysis."),
+    (2, "Our learning circle is practicing Python functions and Statistics before tackling Machine Learning projects."),
+    (2, "Started the Machine Learning Specialization. Regression and model evaluation are our next team study topics."),
+    (3, "A short Pandas practice session made our Python data-cleaning scripts easier to review."),
+    (3, "Trying Data Visualization exercises in Python to communicate uncertainty with better charts."),
+    (4, "I am moving from SQL and Power BI into Statistics and Python for a data science learning plan."),
+    (4, "Our reading group is exploring Generative AI and responsible use of large language models."),
+    (5, "NLP study notes: text classification connects Python programming with Machine Learning."),
+    (5, "Completed a Kaggle Python lesson. Next up is Pandas for grouping and joining tables."),
+    (6, "Revisiting Statistics and probability before the next Machine Learning module."),
+    (7, "Preparing for Azure Fundamentals to understand Azure and Cloud Computing concepts."),
+    (7, "Starting AWS Cloud Practitioner preparation after a Cloud Computing fundamentals session."),
+    (8, "Docker exercises helped our team explain images, containers and local development environments."),
+    (8, "Learning Kubernetes deployment patterns after completing Docker and Linux foundations."),
+    (9, "Trying Terraform to describe AWS infrastructure as code in a practice environment."),
+    (9, "GitHub Actions practice is making CI/CD workflows clearer. Git review habits still matter."),
+    (10, "React Foundations is our frontend study topic. We are revisiting JavaScript before learning TypeScript."),
+    (10, "Building a practice app with React, Node.js and REST APIs in Full Stack Open."),
+    (11, "Learning software testing with pytest while building Python APIs."),
+    (11, "Completed Introduction to Cybersecurity. Networking and Linux are next on my training list."),
+    (12, "Working through web security labs to improve secure coding and recognize OWASP risks."),
+    (12, "Our security study group is comparing threat detection and incident response exercises."),
+    (13, "A technical writing session helped us improve communication in architecture documentation."),
+    (13, "Learning Generative AI evaluation alongside NLP and Machine Learning fundamentals."),
+    (14, "Our analytics team is practicing Python and Pandas for a forecasting learning project."),
+    (15, "Started a SQL refresher to make Power BI reporting work easier."),
+    (16, "An Excel course is helping me check data before analysis."),
+    (17, "We discussed Statistics and sampling in a team learning session."),
+    (18, "Started a Python notebook exercise for a learning challenge."),
+    (19, "Exploring Machine Learning vocabulary before choosing a course."),
+    (20, "Practicing Git branches and code reviews with a small software project."),
+    (20, "Completed an HTML and CSS tutorial and started JavaScript exercises."),
+    (21, "Linux command-line practice is my learning priority this month."),
+    (22, "Reading about Cloud Computing and AWS core services."),
+    (23, "Our team is trying Docker for local practice projects."),
+    (24, "Completed a Networking basics lab and reviewed Cybersecurity terminology."),
+    (25, "Looking at secure coding principles before starting web security labs."),
+    (26, "Our sprint retrospective included Agile and communication learning goals."),
+    (27, "A Power BI workshop covered data visualization and report design."),
+    (27, "Started learning Azure cloud concepts with Microsoft Learn."),
+    (6, "Exploring MLOps and model deployment after learning Python and Machine Learning."),
+    (8, "Studying Apache Spark and SQL for data engineering and ETL pipelines."),
+]
+
+def get_seed_posts() -> list[dict]:
+    now = datetime.now(timezone.utc)
+    return [{"id": f"demo-post-{i + 1:03d}", "text": text,
+             "source": "Synthetic learning community · demo", "source_url": None,
+             "published_at": (now - timedelta(days=days, minutes=i)).isoformat(), "is_demo": True}
+            for i, (days, text) in enumerate(_POSTS)]

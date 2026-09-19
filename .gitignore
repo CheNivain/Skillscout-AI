@@ -6,7 +6,6 @@ __pycache__/
 .env.*
 !.env.example
 .local/
-data/
 logs/
 tmp/
 node_modules/
