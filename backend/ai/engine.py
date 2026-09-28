@@ -24,6 +24,7 @@ from backend.ai.taxonomy import PREREQUISITES, canonical_skills, extract_learnin
 _TOKEN = re.compile(r"[a-z0-9][a-z0-9+#./-]{1,}", re.I)
 _INJECTION = re.compile(
     r"(ignore (all|any|previous|prior) (instructions|prompts)|you are now|system prompt|"
+    r"developer prompt|worker key|api key|secret|system\s*:|"
     r"</?(system|assistant)>|do not follow the (rules|policy))",
     re.I,
 )
@@ -292,8 +293,8 @@ def analyze_profile(profile: dict) -> dict:
     priority = _prerequisite_order(sorted(gaps, key=lambda skill: (-sum(skill in reqs for reqs in PREREQUISITES.values()), gaps.index(skill))), gaps)[:5]
     if not priority:
         priority = gaps[:5] or target[:4]
-    role = str(profile.get("role_title") or "Professional")
-    goal = str(profile.get("career_goal") or "a related technical role")
+    role = _sanitize(str(profile.get("role_title") or "Professional"), 160)
+    goal = _sanitize(str(profile.get("career_goal") or "a related technical role"), 160)
     fallback = (
         f"{role} → {goal}. Current strengths: {', '.join(current[:6]) or 'not specified'}. "
         f"Skill gaps to close: {', '.join(gaps[:8]) or 'maintain current skills'}. "
